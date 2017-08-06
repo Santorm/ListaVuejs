@@ -6,20 +6,20 @@
         </div>
         <ul class='list'>    
             <li  v-for="(task, index) in tareas" >
-               <div id='task' v-show="!task.editable">
+               <div id='task' v-show="!task.editable" :class="{'pendiente': !task.pendiente, 'realizada': task.pendiente }">
                    {{task.tarea}}
                </div> 
                <!-- glyphicon glyphicon-ok -->
-                <div id='task' v-show="task.editable">
-                   <input id='input_list' v-model="task.tarea" ref="inputediting" type='text' >
+                <div id='task'  v-show="task.editable">
+                   <input id='input_list'  v-model="task.tarea" ref="inputediting" type='text' >
                    <!-- <span @click="editing(index)" class="icon glyphicon glyphicon-pencil"></span> -->
                   
                 </div> 
                 <span @click="editing(index)" class="icon glyphicon" :class="{'glyphicon-pencil': !task.editable, 'glyphicon-ok': task.editable }"></span>
-                
+                <span @click="checking(index)" class="icon glyphicon" :class="{'glyphicon-unchecked': !task.pendiente, 'glyphicon-check': task.pendiente }"></span>
             </li>
 
-           <!-- <pre>{{$data}}</pre>  -->
+            <pre>{{$data}}</pre>  
            
             
         </ul>
@@ -38,7 +38,7 @@ export default{
             tareas : [
                 {
                     tarea: 'Aprender Vue js',
-                    pendiente: true,
+                    pendiente: false,
                     editable:false
                     },
                 {
@@ -82,6 +82,26 @@ export default{
                     this.$refs.inputediting[index].focus();
                     })
             }
+        },
+        checking: function(index){
+           
+           //evitar que se activen todos los inputs a la vez
+        //    var i='';
+            // if(this.tareas[index].pendiente == true){
+            //     this.tareas[index].pendiente     = false;
+            // }else{       
+        
+            //         for(var i=0 ; i<this.tareas.length; i++){
+            //                this.tareas[i].pendiente= false;
+
+            //         }
+
+                    this.tareas[index].pendiente =!this.tareas[index].pendiente;
+                    // return this.tareas[index].pendiente;
+                    // Vue.nextTick(() => {
+                    // this.$refs.inputediting[index].focus();
+                    // })
+            // }
         },
          focus: function(index){
             console.log(index);
@@ -128,7 +148,8 @@ export default{
 .icon{
     cursor: pointer;
     float: right;
-    color:grey
+    color:grey;
+    padding: 0px 5px;
 }
 
 .icon:hover{
@@ -157,6 +178,14 @@ li{
 #input_list{
      width: 90%;
     
+}
+.pendiente{
+    color: #000;
+}
+
+.realizada{
+    color: grey;
+    text-decoration: line-through;
 }
 
 </style>
